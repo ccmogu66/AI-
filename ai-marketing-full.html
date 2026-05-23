@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>营销团队 AI 全景图</title>
+<style>
+:root {
+  --teal:        #0F6E56; --teal-bg:    #E1F5EE; --teal-dark:   #085041; --teal-muted: #caf0df;
+  --amber:       #854F0B; --amber-bg:   #FEF3E2; --amber-dark:  #633806; --amber-muted:#fde4b0;
+  --coral:       #993C1D; --coral-bg:   #FAECE7; --coral-dark:  #712B13; --coral-muted:#f9d0c3;
+  --blue:        #185FA5; --blue-bg:    #E6F1FB; --blue-dark:   #0C447C; --blue-muted: #c2dcf7;
+  --purple:      #534AB7; --purple-bg:  #EEEDFE; --purple-dark: #3C3489; --purple-muted:#d8d6fc;
+  --warn:        #A86200; --warn-bg:    #FFF7E6; --warn-bd:     #F0B429;
+  --ink:         #1a1917; --ink-2: #47453f; --ink-3: #928f86;
+  --line:        #e4e1d9; --line-2: #f0ede6;
+  --bg:          #F2F0EA;
+  --card:        #FDFCF9;
+  --region-bg:   #F5F4EF; --region-bd: #D4D1C7;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "PingFang SC","Microsoft YaHei",-apple-system,sans-serif;
+  background: var(--bg);
+  min-height: 100vh;
+  color: var(--ink);
+}
+
+/* ═══ PAGE HEADER ═══ */
+.pg-header {
+  text-align: center;
+  padding: 56px 24px 48px;
+  border-bottom: 1px solid var(--line);
+  background: var(--card);
+}
+.pg-eyebrow { font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 12px; }
+.pg-header h1 { font-size: 26px; font-weight: 600; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 10px; }
+.pg-header p  { font-size: 13.5px; color: var(--ink-3); line-height: 1.6; }
+.pg-chips { display: flex; gap: 8px; justify-content: center; margin-top: 16px; flex-wrap: wrap; }
+.pg-chip {
+  font-size: 11px; font-weight: 500;
+  padding: 4px 14px; border-radius: 20px;
+  background: var(--bg); border: 1px solid var(--line); color: var(--ink-2);
+}
+.pg-chip-num { font-weight: 700; color: var(--ink); margin-right: 3px; }
+
+/* ═══ SECTION WRAPPER ═══ */
+.pg-section { padding: 44px 32px 48px; max-width: 1220px; margin: 0 auto; }
+.pg-section-hd { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 28px; }
+.pg-section-num {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+  color: var(--ink-3);
+  border: 1.5px solid var(--line);
+  border-radius: 6px;
+  padding: 3px 8px;
+  margin-top: 2px;
+  white-space: nowrap;
+}
+.pg-section-title { font-size: 18px; font-weight: 600; color: var(--ink); margin-bottom: 4px; letter-spacing: -0.01em; }
+.pg-section-sub   { font-size: 12.5px; color: var(--ink-3); line-height: 1.5; }
+
+/* ═══ SECTION DIVIDER ═══ */
+.pg-divider {
+  max-width: 1220px; margin: 0 auto;
+  display: flex; align-items: center; gap: 16px;
+  padding: 0 32px;
+}
+.pg-divider-line { flex: 1; height: 1px; background: var(--line); }
+.pg-divider-label {
+  font-size: 10.5px; font-weight: 600; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--ink-3);
+  background: var(--bg);
+  padding: 0 4px;
+  white-space: nowrap;
+}
+
+/* ═══════════════════════════════════════
+   SECTION 1 — WORKFLOW CARDS
+═══════════════════════════════════════ */
+.wf-grid {
+  display: flex;
+  gap: 12px;
+  align-items: stretch;
+}
+
+/* Card */
+.wf-card {
+  flex: 1;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  transition: box-shadow 0.18s, transform 0.18s;
+}
+.wf-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.09); transform: translateY(-2px); }
+
+/* Card header */
+.wf-header {
+  padding: 13px 14px 12px;
+  display: flex; align-items: center; gap: 8px;
+  border-bottom: 2px solid transparent;
+}
+.wf-dot  { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.wf-title{ font-size: 13px; font-weight: 600; letter-spacing: 0.01em; }
+.wf-num  { margin-left: auto; font-size: 9.5px; font-weight: 500; opacity: 0.35; letter-spacing: 0.08em; }
+
+/* Card sub-section */
+.wf-block { padding: 10px 13px; }
+.wf-block + .wf-block { border-top: 1px solid var(--line-2); }
+.wf-block-label {
+  font-size: 8.5px; font-weight: 700; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--ink-3); margin-bottom: 7px;
+}
+
+/* Tasks */
+.wf-tasks { display: flex; flex-direction: column; gap: 3px; }
+.wf-task {
+  font-size: 11px; color: var(--ink-2); line-height: 1.35;
+  padding: 3px 7px; border-radius: 4px;
+  background: rgba(0,0,0,0.02);
+  display: flex; align-items: flex-start; gap: 6px;
+}
+.wf-task::before { content:''; width:3px; height:3px; border-radius:50%; background:var(--ink-3); flex-shrink:0; margin-top:5px; }
+
+/* AI items */
+.wf-ai-list { display: flex; flex-direction: column; gap: 3px; }
+.wf-ai {
+  font-size: 11px; line-height: 1.35;
+  padding: 3px 7px; border-radius: 4px;
+  display: flex; align-items: flex-start; gap: 6px;
+}
+.wf-ai-spark { font-size: 9px; flex-shrink:0; margin-top:1px; }
+
+/* Tool entries */
+.wf-tools-list { display: flex; flex-direction: column; gap: 8px; }
+.wf-tool { }
+.wf-tool-tags { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 3px; }
+.wf-tag {
+  font-size: 10px; font-weight: 600;
+  padding: 2px 8px; border-radius: 20px;
+  white-space: nowrap; letter-spacing: 0.02em;
+}
+.wf-how { font-size: 10.5px; color: var(--ink-2); line-height: 1.5; }
+
+/* Depth */
+.wf-depth {
+  padding: 9px 13px 12px;
+  border-top: 1px solid var(--line-2);
+  margin-top: auto;
+}
+.wf-depth-row { display: flex; align-items: center; gap: 8px; }
+.wf-depth-label { font-size: 9px; color: var(--ink-3); letter-spacing: 0.04em; flex-shrink:0; }
+.wf-bar-bg { flex:1; height:3px; background: var(--line); border-radius:2px; overflow:hidden; }
+.wf-bar-fill { height:100%; border-radius:2px; }
+.wf-depth-text { font-size: 10px; font-weight: 700; flex-shrink:0; letter-spacing:0.02em; }
+
+/* ── Color themes per card ── */
+/* teal */
+.wf-teal .wf-header  { background: var(--teal-bg); border-color: var(--teal); }
+.wf-teal .wf-dot     { background: var(--teal); }
+.wf-teal .wf-title   { color: var(--teal-dark); }
+.wf-teal .wf-ai      { background: #e8f7f1; color: var(--teal-dark); }
+.wf-teal .wf-tag     { background: var(--teal-muted); color: var(--teal-dark); }
+.wf-teal .wf-bar-fill{ background: var(--teal); }
+.wf-teal .wf-depth-text { color: var(--teal); }
+/* amber */
+.wf-amber .wf-header  { background: var(--amber-bg); border-color: var(--amber); }
+.wf-amber .wf-dot     { background: var(--amber); }
+.wf-amber .wf-title   { color: var(--amber-dark); }
+.wf-amber .wf-ai      { background: #fef5e4; color: var(--amber-dark); }
+.wf-amber .wf-tag     { background: var(--amber-muted); color: var(--amber-dark); }
+.wf-amber .wf-bar-fill{ background: var(--amber); }
+.wf-amber .wf-depth-text { color: var(--amber); }
+/* coral */
+.wf-coral .wf-header  { background: var(--coral-bg); border-color: var(--coral); }
+.wf-coral .wf-dot     { background: var(--coral); }
+.wf-coral .wf-title   { color: var(--coral-dark); }
+.wf-coral .wf-ai      { background: #fdf2ee; color: var(--coral-dark); }
+.wf-coral .wf-tag     { background: var(--coral-muted); color: var(--coral-dark); }
+.wf-coral .wf-bar-fill{ background: var(--coral); }
+.wf-coral .wf-depth-text { color: var(--coral); }
+/* blue */
+.wf-blue .wf-header   { background: var(--blue-bg); border-color: var(--blue); }
+.wf-blue .wf-dot      { background: var(--blue); }
+.wf-blue .wf-title    { color: var(--blue-dark); }
+.wf-blue .wf-ai       { background: #edf4fc; color: var(--blue-dark); }
+.wf-blue .wf-tag      { background: var(--blue-muted); color: var(--blue-dark); }
+.wf-blue .wf-bar-fill { background: var(--blue); }
+.wf-blue .wf-depth-text { color: var(--blue); }
+/* purple */
+.wf-purple .wf-header  { background: var(--purple-bg); border-color: var(--purple); }
+.wf-purple .wf-dot     { background: var(--purple); }
+.wf-purple .wf-title   { color: var(--purple-dark); }
+.wf-purple .wf-ai      { background: #f2f1fe; color: var(--purple-dark); }
+.wf-purple .wf-tag     { background: var(--purple-muted); color: var(--purple-dark); }
+.wf-purple .wf-bar-fill{ background: var(--purple); }
+.wf-purple .wf-depth-text { color: var(--purple); }
+
+/* ═══════════════════════════════════════
+   SECTION 2 — AGENT FLOW
+═══════════════════════════════════════ */
+.af-scroll { width:100%; overflow-x:auto; padding-bottom:8px; }
+.af-flow {
+  display: flex; align-items: center; gap:0;
+  min-width: max-content; padding: 20px 0 12px;
+}
+
+/* IO */
+.af-io {
+  flex-shrink: 0;
+  background: var(--ink); color: #fff;
+  border-radius: 12px;
+  padding: 14px 11px;
+  width: 82px; text-align: center;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+}
+.af-io.end { background: #1e3d30; }
+.af-io-icon { font-size: 20px; line-height:1; }
+.af-io-label { font-size: 11px; font-weight: 500; line-height: 1.35; }
+
+/* Connector */
+.af-conn {
+  flex-shrink:0; width:34px;
+  display: flex; flex-direction: column; align-items: center; gap:4px;
+  padding-bottom: 14px;
+}
+.af-conn-line {
+  width:100%; display:flex; align-items:center;
+}
+.af-conn-line span { flex:1; height:1.5px; background:var(--line); display:block; }
+.af-conn-line::after {
+  content:''; width:0; height:0;
+  border-top:4px solid transparent; border-bottom:4px solid transparent;
+  border-left:6px solid var(--line);
+}
+.af-conn-text { font-size:9px; color:var(--ink-3); white-space:nowrap; text-align:center; letter-spacing:0.03em; }
+
+/* Agent region */
+.af-region {
+  flex-shrink:0;
+  background: var(--region-bg);
+  border: 1.5px dashed var(--region-bd);
+  border-radius:14px;
+  padding: 20px 10px 10px;
+  position:relative;
+  display:flex; flex-direction:column; gap:0;
+  align-self: stretch; justify-content: center;
+}
+.af-badge {
+  position:absolute; top:-11px; left:12px;
+  background: var(--region-bg); border:1px solid var(--region-bd);
+  border-radius:20px; padding:2px 9px;
+  font-size:9.5px; font-weight:600; color:var(--ink-3);
+  letter-spacing:0.06em; white-space:nowrap;
+}
+
+/* Step inside region */
+.af-step {
+  background: var(--card);
+  border-radius:9px; border:1px solid var(--line);
+  padding:9px 10px; width:162px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  transition: box-shadow 0.15s;
+}
+.af-step:hover { box-shadow: 0 3px 10px rgba(0,0,0,0.09); }
+.af-step-top { display:flex; align-items:center; gap:7px; margin-bottom:4px; }
+.af-step-num {
+  width:22px; height:22px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:10px; font-weight:700; flex-shrink:0;
+}
+.af-step-title { font-size:12.5px; font-weight:600; }
+.af-step-desc { font-size:10px; color:var(--ink-3); line-height:1.4; margin-bottom:5px; padding-left:29px; }
+.af-step-tags { display:flex; gap:4px; flex-wrap:wrap; padding-left:29px; }
+.af-tag { font-size:9.5px; font-weight:600; padding:1px 7px; border-radius:20px; white-space:nowrap; }
+
+/* Mini flow between steps */
+.af-mini {
+  display:flex; align-items:center; gap:5px;
+  padding:5px 0 5px 29px;
+  font-size:9.5px; color:var(--ink-3);
+}
+.af-mini::before { content:''; width:1px; height:12px; background:var(--line); display:block; flex-shrink:0; }
+.af-mini-dot { width:4px; height:4px; border-radius:50%; background:var(--line); flex-shrink:0; }
+
+/* Step color themes */
+.af-teal  .af-step { border-left:3px solid var(--teal); }
+.af-teal  .af-step-num   { background:var(--teal-bg);    color:var(--teal-dark); }
+.af-teal  .af-step-title { color:var(--teal-dark); }
+.af-teal  .af-tag        { background:var(--teal-muted); color:var(--teal-dark); }
+.af-amber .af-step { border-left:3px solid var(--amber); }
+.af-amber .af-step-num   { background:var(--amber-bg);   color:var(--amber-dark); }
+.af-amber .af-step-title { color:var(--amber-dark); }
+.af-amber .af-tag        { background:var(--amber-muted);color:var(--amber-dark); }
+.af-coral .af-step { border-left:3px solid var(--coral); }
+.af-coral .af-step-num   { background:var(--coral-bg);   color:var(--coral-dark); }
+.af-coral .af-step-title { color:var(--coral-dark); }
+.af-coral .af-tag        { background:var(--coral-muted);color:var(--coral-dark); }
+.af-blue  .af-step { border-left:3px solid var(--blue); }
+.af-blue  .af-step-num   { background:var(--blue-bg);    color:var(--blue-dark); }
+.af-blue  .af-step-title { color:var(--blue-dark); }
+.af-blue  .af-tag        { background:var(--blue-muted); color:var(--blue-dark); }
+.af-purple .af-step { border-left:3px solid var(--purple); }
+.af-purple .af-step-num   { background:var(--purple-bg);   color:var(--purple-dark); }
+.af-purple .af-step-title { color:var(--purple-dark); }
+.af-purple .af-tag        { background:var(--purple-muted);color:var(--purple-dark); }
+
+/* Human node */
+.af-human {
+  flex-shrink:0; width:108px;
+  background: var(--warn-bg); border:1.5px solid var(--warn-bd);
+  border-radius:12px; padding:12px 10px;
+  display:flex; flex-direction:column; align-items:center; gap:6px;
+  text-align:center; align-self:stretch; justify-content:center;
+}
+.af-human-icon {
+  width:32px; height:32px; background:#fff;
+  border:1px solid var(--warn-bd); border-radius:50%;
+  display:flex; align-items:center; justify-content:center; font-size:15px;
+}
+.af-human-title { font-size:11px; font-weight:700; color:var(--warn); letter-spacing:0.02em; }
+.af-human-desc  { font-size:10px; color:var(--ink-2); line-height:1.4; }
+.af-human-out {
+  font-size:9.5px; font-weight:600; color:var(--warn);
+  background:#fff; border:1px solid var(--warn-bd);
+  border-radius:20px; padding:2px 8px; white-space:nowrap; margin-top:2px;
+}
+
+/* ═══ FOOTER STATS ═══ */
+.pg-footer { padding: 36px 32px 56px; max-width:1220px; margin:0 auto; }
+.pg-stats {
+  background:var(--card); border:1px solid var(--line);
+  border-radius:14px; padding:16px 0;
+  display:flex; align-items:center; justify-content:space-around;
+  flex-wrap:wrap; margin-bottom:16px;
+}
+.pg-stat { text-align:center; padding:6px 20px; }
+.pg-stat-num { font-size:20px; font-weight:700; letter-spacing:-0.02em; color:var(--ink); }
+.pg-stat-label { font-size:10.5px; color:var(--ink-3); margin-top:2px; }
+.pg-stat-divider { width:1px; height:28px; background:var(--line); }
+.pg-platforms {
+  display:flex; gap:8px; align-items:center; flex-wrap:wrap; justify-content:center;
+}
+.pg-plat-label { font-size:11px; color:var(--ink-3); }
+.pg-plat-tag {
+  font-size:11px; font-weight:600; padding:4px 12px;
+  border-radius:20px; background:var(--card); border:1px solid var(--line); color:var(--ink-2);
+}
+
+/* ═══ ANIMATIONS ═══ */
+.wf-card { opacity:0; transform:translateY(8px); animation:rise .35s ease forwards; }
+.wf-card:nth-child(1) { animation-delay:.04s; }
+.wf-card:nth-child(2) { animation-delay:.10s; }
+.wf-card:nth-child(3) { animation-delay:.16s; }
+.wf-card:nth-child(4) { animation-delay:.22s; }
+.wf-card:nth-child(5) { animation-delay:.28s; }
+.af-flow > * { opacity:0; animation:rise .3s ease forwards; }
+.af-flow > *:nth-child(1)  { animation-delay:.32s; }
+.af-flow > *:nth-child(2)  { animation-delay:.36s; }
+.af-flow > *:nth-child(3)  { animation-delay:.40s; }
+.af-flow > *:nth-child(4)  { animation-delay:.44s; }
+.af-flow > *:nth-child(5)  { animation-delay:.48s; }
+.af-flow > *:nth-child(6)  { animation-delay:.52s; }
+.af-flow > *:nth-child(7)  { animation-delay:.56s; }
+.af-flow > *:nth-child(8)  { animation-delay:.60s; }
+.af-flow > *:nth-child(9)  { animation-delay:.64s; }
+.af-flow > *:nth-child(10) { animation-delay:.68s; }
+.af-flow > *:nth-child(11) { animation-delay:.72s; }
+.af-flow > *:nth-child(12) { animation-delay:.76s; }
+.af-flow > *:nth-child(13) { animation-delay:.80s; }
+.pg-footer { opacity:0; animation:rise .3s ease .84s forwards; }
+@keyframes rise { to { opacity:1; transform:translateY(0); } }
+</style>
+</head>
+<body>
+
+<!-- ═══ PAGE HEADER ═══ -->
+<header class="pg-header">
+  <div class="pg-eyebrow">营销团队 × AI</div>
+  <h1>工作流程全景图</h1>
+  <p>AI 在营销五大环节的介入方式 · 推荐工具 · Agent 串联流程</p>
+  <div class="pg-chips">
+    <span class="pg-chip"><span class="pg-chip-num">5</span>核心环节</span>
+    <span class="pg-chip"><span class="pg-chip-num">3</span>自动执行区块</span>
+    <span class="pg-chip"><span class="pg-chip-num">3</span>人工判断节点</span>
+    <span class="pg-chip"><span class="pg-chip-num">60–70%</span>重复工作可省</span>
+  </div>
+</header>
+
+<!-- ═══ SECTION 1 ═══ -->
+<div class="pg-section">
+  <div class="pg-section-hd">
+    <div class="pg-section-num">01</div>
+    <div>
+      <div class="pg-section-title">AI 介入全景图</div>
+      <div class="pg-section-sub">五个核心环节 · AI 如何介入 · 推荐工具与用法 · 介入深度</div>
+    </div>
+  </div>
+
+  <div class="wf-grid">
+
+    <!-- ① 拆解Brief -->
+    <div class="wf-card wf-teal">
+      <div class="wf-header">
+        <span class="wf-dot"></span>
+        <span class="wf-title">拆解 Brief</span>
+        <span class="wf-num">01</span>
+      </div>
+      <div class="wf-block">
+        <div class="wf-block-label">具体工作</div>
+        <div class="wf-tasks">
+          <div class="wf-task">提炼核心诉求</div>
+          <div class="wf-task">识别显/隐性目标</div>
+          <div class="wf-task">梳理受众画像</div>
+          <div class="wf-task">生成追问清单</div>
+          <div class="wf-task">团队内部对齐</div>
+        </div>
+      </div>
+      <div class="wf-block">
+        <div class="wf-block-label">AI 介入</div>
+        <div class="wf-ai-list">
+          <div class="wf-ai"><span class="wf-ai-spark">✦</span>提炼诉求·识别模糊点</div>
+          <div class="wf-ai"><span class="wf-ai-spark">✦</span>模拟客户视角推测</div>
+          <div class="wf-ai"><span class="wf-ai-spark">✦</span>自动生成追问清单</div>
+        </div>
+      </div>
+      <div class="wf-block">
+        <div class="wf-block-label">推荐工具 &amp; 用法</div>
+        <div class="wf-tools-list">
+          <div class="wf-tool">
+            <div class="wf-tool-tags">
+              <span class="wf-tag">Claude</span>
+              <span class="wf-tag">ChatGPT</span>
+              <span class="wf-tag">Kimi</span>
+            </div>
+            <div class="wf-how">将 brief 原文粘贴，提示：「你是资深营销策略师，提炼核心目标、识别模糊点，并列出5个追问」</div>
+          </div>
+        </div>
+      </div>
+      <div class="wf-depth">
+        <div class="wf-depth-row">
+          <span class="wf-depth-label">介入深度</span>
+          <div class="wf-bar-bg"><div class="wf-bar-fill" style="width:40%"></div></div>
+          <span class="wf-depth-text">辅助校验</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ② 资料整理 -->
+    <div class="wf-card wf-amber">
+      <div class="wf-header">
+        <span class="wf-dot"></span>
+        <span class="wf-title">资料整理</span>
+        <span class="wf-num">02</span>
+      </div>
+      <div class="wf-block">
+        <div class="wf-block-label">具体工作</div>
+        <div class="wf-tasks">
+          <div class="wf-task">收集行业背景资料</div>
+          <div class="wf-task">竞品动态分析</div>
+          <div class="wf-task">受众洞察整理</div>
+          <div class="wf-task">品牌历史梳理</div>
+          <div class="wf-task">数据汇总提炼</div>
+        </div>
+      </div>
+      <div class="wf-block">
+        <div class="wf-block-label">AI 介入</div>
+        <div class="wf-ai-list">
+          <div class="wf-ai"><span class="wf-ai-spark">✦</span>长文档总结提炼</div>
+          <div class="wf-ai"><span class="wf-ai-spark">✦</span>归纳关键结论</div>
+          <div class="wf-ai"><span class="wf-ai-spark">✦</span>竞品对比分析表</div>
+        </div>
+      </div>
+      <div class="wf-block">
+        <div class="wf-block-label">推荐工具 &amp; 用法</div>
+        <div class="wf-tools-list">
+          <div class="wf-tool">
+            <div class="wf-tool-tags"><span class="wf-tag">Perplexity</span></div>
+            <div class="wf-how">Deep Research 模式搜索行业/竞品，自动附带来源引用，结果可直接导出</div>
+          </div>
+          <div class="wf-tool">
+            <div class="wf-tool-tags"><span class="wf-tag">NotebookLM</span></div>
+            <div class="wf-how">上传多份资料，生成竞品对比报告，原来数小时→45分钟</div>
+          </div>
+        </div>
+      </div>
+      <div class="wf-depth">
+        <div class="wf-depth-row">
+          <span class="wf-depth-label">介入深度</span>
+          <div class="wf-bar-bg"><div class="wf-bar-fill" style="width:85%"></div></div>
+          <span class="wf-depth-text">高度替代</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ③ 案例整理 -->
+    <div class="wf-card wf-coral">
+      <div class="wf-header">
+        <span class="wf-dot"></span>
+        <span class="wf-title">案例整理</span>
+        <span class="wf-num">03</span>
+      </div>
+      <div class="wf-block">
+        <div class="wf-block-label">具体工作</div>
+        <div class="wf-tasks">
+          <div class="wf-task">寻找优秀案例</div>
+          <div class="wf-task">按维度分类归纳</div>
+          <div class="wf-task">提炼核心亮点</div>
+          <div class="wf-task">筛选相关案例</div>
+          <div class="wf-task">整理借鉴方向</div>
+        </div>
+      </div>
+      <div class="wf-block">
+        <div class="wf-block-label">AI 介入</div>
+        <div class="wf-ai-list">
+          <div class="wf-ai"><span class="wf-ai-spark">✦</span>推荐案例方向</div>
+          <div class="wf-ai"><span class="wf-ai-spark">✦</span>提炼案例亮点</div>
+          <div class="wf-ai"><span class="wf-ai-spark">✦</span>维度自动分类</div>
+        </div>
+      </div>
+      <div class="wf-block">
+        <div class="wf-block-label">推荐工具 &amp; 用法</div>
+        <div class="wf-tools-list">
+          <div class="wf-tool">
+            <div class="wf-tool-tags"><span class="wf-tag">Perplexity</span></div>
+            <div class="wf-how">搜「[行业]+营销案例+2024」，带来源引用，快速获取案例清单</div>
+          </div>
+          <div class="wf-tool">
+            <div class="wf-tool-tags"><span class="wf-tag">Claude / Kimi</span></div>
+            <div class="wf-how">粘贴案例文本，让 AI 按「创意/渠道/受众/效果」四维提炼并输出表格</div>
+          </div>
+        </div>
+      </div>
+      <div class="wf-depth">
+        <div class="wf-depth-row">
+          <span class="wf-depth-label">介入深度</span>
+          <div class="wf-bar-bg"><div class="wf-bar-fill" style="width:55%"></div></div>
+          <span class="wf-depth-text">辅助归纳</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ④ 策略输出 -->
+    <div class="wf-card wf-blue">
+      <div class="wf-header">
+        <span class="wf-dot"></span>
+        <span class="wf-title">策略输出</span>
+        <span class="wf-num">04</span>
+      </div>
+      <div class="wf-block">
+        <div class="wf-block-label">具体工作</div>
+        <div class="wf-tasks">
+          <div class="wf-task">提炼核心洞察</div>
+          <div class="wf-task">确定传播主题</div>
+          <div class="wf-task">制定各项策略</div>
+          <div class="wf-task">输出 Big Idea</div>
+          <div class="wf-task">规划执行节奏</div>
+        </div>
+      </div>
+      <div class="wf-block">
+        <div class="wf-block-label">AI 介入</div>
+        <div class="wf-ai-list">
+          <div class="wf-ai"><span class="wf-ai-spark">✦</span>生成多个策略方向</div>
+          <div class="wf-ai"><span class="wf-ai-spark">✦</span>搭建策略框架</div>
+          <div class="wf-ai"><span class="wf-ai-spark">✦</span>生成 Big Idea 候选</div>
+        </div>
+      </div>
+      <div class="wf-block">
+        <div class="wf-block-label">推荐工具 &amp; 用法</div>
+        <div class="wf-tools-list">
+          <div class="wf-tool">
+            <div class="wf-tool-tags"><span class="wf-tag">Claude</span></div>
+            <div class="wf-how">输入洞察+受众+目标，输出3个差异化策略方向，人工筛选深化</div>
+          </div>
+          <div class="wf-tool">
+            <div class="wf-tool-tags"><span class="wf-tag">ChatGPT</span></div>
+            <div class="wf-how">头脑风暴：「给5个反常识的传播角度，每个配一句 slogan」</div>
+          </div>
+          <div class="wf-tool">
+            <div class="wf-tool-tags"><span class="wf-tag">⚠ 注意</span></div>
+            <div class="wf-how">核心 insight 需人工主导，AI 输出仅作灵感参考</div>
+          </div>
+        </div>
+      </div>
+      <div class="wf-depth">
+        <div class="wf-depth-row">
+          <span class="wf-depth-label">介入深度</span>
+          <div class="wf-bar-bg"><div class="wf-bar-fill" style="width:50%"></div></div>
+          <span class="wf-depth-text">框架辅助</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ⑤ 包装PPT -->
+    <div class="wf-card wf-purple">
+      <div class="wf-header">
+        <span class="wf-dot"></span>
+        <span class="wf-title">包装 PPT</span>
+        <span class="wf-num">05</span>
+      </div>
+      <div class="wf-block">
+        <div class="wf-block-label">具体工作</div>
+        <div class="wf-tasks">
+          <div class="wf-task">整理逻辑结构</div>
+          <div class="wf-task">内容可视化</div>
+          <div class="wf-task">撰写标题金句</div>
+          <div class="wf-task">设计数据图表</div>
+          <div class="wf-task">统一视觉风格</div>
+        </div>
+      </div>
+      <div class="wf-block">
+        <div class="wf-block-label">AI 介入</div>
+        <div class="wf-ai-list">
+          <div class="wf-ai"><span class="wf-ai-spark">✦</span>内容转化为金句</div>
+          <div class="wf-ai"><span class="wf-ai-spark">✦</span>建议页面结构</div>
+          <div class="wf-ai"><span class="wf-ai-spark">✦</span>配合工具生成初稿</div>
+        </div>
+      </div>
+      <div class="wf-block">
+        <div class="wf-block-label">推荐工具 &amp; 用法</div>
+        <div class="wf-tools-list">
+          <div class="wf-tool">
+            <div class="wf-tool-tags"><span class="wf-tag">Gamma</span></div>
+            <div class="wf-how">粘贴大纲一键生成完整 PPT，快速出结构初稿</div>
+          </div>
+          <div class="wf-tool">
+            <div class="wf-tool-tags"><span class="wf-tag">Canva AI</span></div>
+            <div class="wf-how">Magic Design 输入主题自动配模板，视觉资源丰富</div>
+          </div>
+          <div class="wf-tool">
+            <div class="wf-tool-tags"><span class="wf-tag">Lovart</span></div>
+            <div class="wf-how">AI 设计 Agent，从主题自动完成内容规划到逐页生成</div>
+          </div>
+          <div class="wf-tool">
+            <div class="wf-tool-tags"><span class="wf-tag">美图 AI PPT</span></div>
+            <div class="wf-how">中文场景友好，适合日常内部汇报快速出稿</div>
+          </div>
+        </div>
+      </div>
+      <div class="wf-depth">
+        <div class="wf-depth-row">
+          <span class="wf-depth-label">介入深度</span>
+          <div class="wf-bar-bg"><div class="wf-bar-fill" style="width:85%"></div></div>
+          <span class="wf-depth-text">高度替代</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /wf-grid -->
+</div><!-- /pg-section -->
+
+<!-- ═══ DIVIDER ═══ -->
+<div class="pg-divider">
+  <div class="pg-divider-line"></div>
+  <span class="pg-divider-label">如何用 Agent 串联？</span>
+  <div class="pg-divider-line"></div>
+</div>
+
+<!-- ═══ SECTION 2 ═══ -->
+<div class="pg-section">
+  <div class="pg-section-hd">
+    <div class="pg-section-num">02</div>
+    <div>
+      <div class="pg-section-title">Agent 串联流程</div>
+      <div class="pg-section-sub">自动执行区块 + 人工判断节点，把五个环节串联成一个完整 Pipeline</div>
+    </div>
+  </div>
+
+  <div class="af-scroll">
+  <div class="af-flow">
+
+    <!-- START -->
+    <div class="af-io">
+      <span class="af-io-icon">📄</span>
+      <span class="af-io-label">输入<br>客户 Brief</span>
+    </div>
+
+    <div class="af-conn">
+      <div class="af-conn-line"><span></span></div>
+      <div class="af-conn-text">触发</div>
+    </div>
+
+    <!-- REGION 1 -->
+    <div class="af-region">
+      <div class="af-badge">🤖 Agent 自动执行</div>
+      <div class="af-teal">
+        <div class="af-step">
+          <div class="af-step-top"><span class="af-step-num">01</span><span class="af-step-title">拆解 Brief</span></div>
+          <div class="af-step-desc">提炼目标 · 识别模糊点 · 生成追问</div>
+          <div class="af-step-tags"><span class="af-tag">Claude</span></div>
+        </div>
+      </div>
+      <div class="af-mini"><span class="af-mini-dot"></span>结构化需求文档</div>
+      <div class="af-amber">
+        <div class="af-step">
+          <div class="af-step-top"><span class="af-step-num">02</span><span class="af-step-title">资料整理</span></div>
+          <div class="af-step-desc">行业搜集 · 竞品对比 · 受众洞察</div>
+          <div class="af-step-tags"><span class="af-tag">Perplexity</span><span class="af-tag">NotebookLM</span></div>
+        </div>
+      </div>
+      <div class="af-mini"><span class="af-mini-dot"></span>研究报告 + 竞品分析</div>
+      <div class="af-coral">
+        <div class="af-step">
+          <div class="af-step-top"><span class="af-step-num">03</span><span class="af-step-title">案例整理</span></div>
+          <div class="af-step-desc">搜索案例 · 提炼亮点 · 维度归纳</div>
+          <div class="af-step-tags"><span class="af-tag">Perplexity</span><span class="af-tag">NotebookLM</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="af-conn">
+      <div class="af-conn-line"><span></span></div>
+      <div class="af-conn-text">研究摘要</div>
+    </div>
+    <div class="af-human">
+      <div class="af-human-icon">👤</div>
+      <div class="af-human-title">人工节点 ①</div>
+      <div class="af-human-desc">审阅研究成果，确认策略方向</div>
+      <div class="af-human-out">方向确认</div>
+    </div>
+
+    <div class="af-conn">
+      <div class="af-conn-line"><span></span></div>
+      <div class="af-conn-text">确认方向</div>
+    </div>
+
+    <!-- REGION 2 -->
+    <div class="af-region">
+      <div class="af-badge">🤖 Agent 自动执行</div>
+      <div class="af-blue">
+        <div class="af-step">
+          <div class="af-step-top"><span class="af-step-num">04</span><span class="af-step-title">策略生成</span></div>
+          <div class="af-step-desc">整合前三步，生成策略框架与 Big Idea 候选</div>
+          <div class="af-step-tags"><span class="af-tag">Claude</span><span class="af-tag">ChatGPT</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="af-conn">
+      <div class="af-conn-line"><span></span></div>
+      <div class="af-conn-text">策略初稿</div>
+    </div>
+    <div class="af-human">
+      <div class="af-human-icon">👤</div>
+      <div class="af-human-title">人工节点 ②</div>
+      <div class="af-human-desc">审核策略，补充洞察，拍板方向</div>
+      <div class="af-human-out">定稿策略</div>
+    </div>
+
+    <div class="af-conn">
+      <div class="af-conn-line"><span></span></div>
+      <div class="af-conn-text">定稿策略</div>
+    </div>
+
+    <!-- REGION 3 -->
+    <div class="af-region">
+      <div class="af-badge">🤖 Agent 自动执行</div>
+      <div class="af-purple">
+        <div class="af-step">
+          <div class="af-step-top"><span class="af-step-num">05</span><span class="af-step-title">PPT 生成</span></div>
+          <div class="af-step-desc">内容结构化 · 金句提炼 · 自动排版</div>
+          <div class="af-step-tags"><span class="af-tag">Gamma</span><span class="af-tag">Canva AI</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="af-conn">
+      <div class="af-conn-line"><span></span></div>
+      <div class="af-conn-text">PPT 初稿</div>
+    </div>
+    <div class="af-human">
+      <div class="af-human-icon">👤</div>
+      <div class="af-human-title">人工节点 ③</div>
+      <div class="af-human-desc">审核 PPT，调整视觉与内容</div>
+      <div class="af-human-out">最终定稿</div>
+    </div>
+
+    <div class="af-conn">
+      <div class="af-conn-line"><span></span></div>
+      <div class="af-conn-text">交付</div>
+    </div>
+
+    <!-- END -->
+    <div class="af-io end">
+      <span class="af-io-icon">📊</span>
+      <span class="af-io-label">输出<br>完整提案</span>
+    </div>
+
+  </div>
+  </div><!-- /af-scroll -->
+</div><!-- /pg-section -->
+
+<!-- ═══ FOOTER ═══ -->
+<div class="pg-footer">
+  <div class="pg-stats">
+    <div class="pg-stat"><div class="pg-stat-num">5</div><div class="pg-stat-label">核心环节全覆盖</div></div>
+    <div class="pg-stat-divider"></div>
+    <div class="pg-stat"><div class="pg-stat-num">3</div><div class="pg-stat-label">自动执行区块</div></div>
+    <div class="pg-stat-divider"></div>
+    <div class="pg-stat"><div class="pg-stat-num">3</div><div class="pg-stat-label">人工判断节点</div></div>
+    <div class="pg-stat-divider"></div>
+    <div class="pg-stat"><div class="pg-stat-num">60–70%</div><div class="pg-stat-label">重复工作可省</div></div>
+    <div class="pg-stat-divider"></div>
+    <div class="pg-stat"><div class="pg-stat-num">10+</div><div class="pg-stat-label">推荐 AI 工具</div></div>
+  </div>
+  <div class="pg-platforms">
+    <span class="pg-plat-label">推荐 Agent 搭建平台：</span>
+    <span class="pg-plat-tag">扣子 Coze</span>
+    <span class="pg-plat-tag">Dify</span>
+    <span class="pg-plat-tag">n8n</span>
+    <span class="pg-plat-tag">FastGPT</span>
+  </div>
+</div>
+
+</body>
+</html>
